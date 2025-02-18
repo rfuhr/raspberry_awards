@@ -1,26 +1,19 @@
 import "reflect-metadata";
 import express from 'express';
 import path from 'path';
-import { prodDataSource } from './infra/database/prod.database';
-import { testDataSource } from './infra/database/test.database';
 import routes from './app/routes';
 import { importMovie } from "./app/services/movie.service";
+import { getDataSource } from "./infra/database/factory.datasource";
 
 const app = express();
 
 const inicializaDatabase = async () => {
     try {
-        if (process.env.NODE_ENV === 'test') {
-            await testDataSource.initialize();
+        if (process.env.NODE_ENV !== 'test') {
+            await getDataSource().initialize();
             console.log('Conectado ao banco de dados de teste');
             execImportMovie();
-        } else {
-            await prodDataSource.initialize();
-            console.log('Conectado ao banco de dados');
-            execImportMovie();
         }
-
-
     } catch (error) {
         console.error('Erro ao conectar com o banco de dados', error);
     }
@@ -28,7 +21,10 @@ const inicializaDatabase = async () => {
 
 const execImportMovie = async () => {
     try {
-        const filePath = path.join(__dirname, '..', 'Movielist.csv');
+        let filePath = path.join(__dirname, '..', 'Movielist.csv');
+        if (process.env.NODE_ENV === 'test') {
+            filePath = path.join(__dirname, 'tests', 'Movielist.csv');
+        }
 
         await importMovie(filePath);
     }

@@ -10,6 +10,6 @@ export class ProducerEntity {
     @Column({ type: "varchar", length: 255 })
     name!: string;
 
-    @ManyToMany(() => MovieEntity)
+    @ManyToMany(() => MovieEntity, (movie) => movie.producers)
     movies?: MovieEntity[] | null;
 }

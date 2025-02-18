@@ -1,15 +1,8 @@
+import path from 'path';
 import request from 'supertest';
 import app from '../app';
-import { testDataSource } from "../infra/database/test.database";
-import { prodDataSource } from '../infra/database/prod.database';
-
-beforeAll(async () => {
-    await testDataSource.initialize();
-});
-
-afterAll(async () => {
-    await testDataSource.destroy();
-});
+import { getDataSource } from '../infra/database/factory.datasource';
+import { importMovie } from '../app/services/movie.service';
 
 describe('Movie', () => {
 
@@ -17,9 +10,17 @@ describe('Movie', () => {
         const response = await request(app).post('/api/movies').send({year: 2021, title: 'Filme 1', studios: 'Warner Bros', producers: [{name: 'Joel Silver'}], winner: true});
 
         expect(response.status).toBe(201);
+        expect(response.body.title).toBe('Filme 1');
+        expect(response.body.winner).toBe(true);
+        expect(response.body.year).toBe(2021);
     });
 
     it('deve retornar todos os filmes', async () => {
+        const movieRepository = getDataSource().getRepository('MovieEntity');
+        const producerRepository = getDataSource().getRepository('ProducerEntity');
+        movieRepository.clear();
+        producerRepository.clear();
+
         await request(app).post('/api/movies').send({year: 2021, title: 'Filme 1', studios: 'Warner Bros', producers: [{name: 'Joel Silver'}], winner: false});
         await request(app).post('/api/movies').send({year: 2022, title: 'Filme 2', studios: 'Universal', producers: [{name: 'Steven Spielberg'}], winner: true});
 
@@ -34,9 +35,14 @@ describe('Movie', () => {
     });
 
     it('deve retornar um filme por id', async () => {
-        const movie = await request(app).post('/api/movies').send({year: 2021, title: 'Filme 1', studios: 'Warner Bros', producers: [{name: 'Joel Silver'}], winner: false});
+        const movieRepository = getDataSource().getRepository('MovieEntity');
+        const producerRepository = getDataSource().getRepository('ProducerEntity');
+        movieRepository.clear();
+        producerRepository.clear();
 
-        const response = await request(app).get(`/api/movies/${movie.body.id}`);
+        let response = await request(app).post('/api/movies').send({year: 2021, title: 'Filme 1', studios: 'Warner Bros', producers: [{name: 'Joel Silver'}], winner: false});
+
+        response = await request(app).get(`/api/movies/${response.body.id}`);
 
         expect(response.status).toBe(200);
         expect(response.body.title).toBe('Filme 1');
@@ -49,9 +55,14 @@ describe('Movie', () => {
     });
 
     it('deve atualizar um filme com sucesso', async () => {
-        const movie = await request(app).post('/api/movies').send({year: 2021, title: 'Filme 1', studios: 'Warner Bros', producers: [{name: 'Joel Silver'}], winner: false});
+        const movieRepository = getDataSource().getRepository('MovieEntity');
+        const producerRepository = getDataSource().getRepository('ProducerEntity');
+        movieRepository.clear();
+        producerRepository.clear();
 
-        const response = await request(app).put(`/api/movies/${movie.body.id}`).send({year: 2022, title: 'Filme 2', studios: 'Universal', producers: [{name: 'Steven Spielberg'}], winner: true});
+        let response = await request(app).post('/api/movies').send({year: 2021, title: 'Filme 1', studios: 'Warner Bros', producers: [{name: 'Joel Silver'}], winner: false});
+
+        response = await request(app).put(`/api/movies/${response.body.id}`).send({year: 2022, title: 'Filme 2', studios: 'Universal', producers: [{name: 'Steven Spielberg'}], winner: true});
 
         expect(response.status).toBe(200);
         expect(response.body.title).toBe('Filme 2');
@@ -63,10 +74,30 @@ describe('Movie', () => {
     });
 
     it('deve deletar um filme com sucesso', async () => {
-        const movie = await request(app).post('/api/movies').send({year: 2021, title: 'Filme 1', studios: 'Warner Bros', producers: [{name: 'Joel Silver'}], winner: false});
+        const movieRepository = getDataSource().getRepository('MovieEntity');
+        const producerRepository = getDataSource().getRepository('ProducerEntity');
+        movieRepository.clear();
+        producerRepository.clear();
 
-        const response = await request(app).delete(`/api/movies/${movie.body.id}`);
+        let response = await request(app).post('/api/movies').send({year: 2021, title: 'Filme 1', studios: 'Warner Bros', producers: [{name: 'Joel Silver'}], winner: false});
+
+        response = await request(app).delete(`/api/movies/${response.body.id}`);
 
         expect(response.status).toBe(204);
+    });
+
+    it ('deve importar uma lista de filmes com sucesso', async () => {
+        const movieRepository = getDataSource().getRepository('MovieEntity');
+        const producerRepository = getDataSource().getRepository('ProducerEntity');
+        movieRepository.clear();
+        producerRepository.clear();
+
+        const pathFile = path.resolve(__dirname, 'Movielist.csv');
+        await importMovie(pathFile);
+
+        const response = await request(app).get('/api/movies');
+
+        expect(response.status).toBe(200);
+        expect(response.body).toHaveLength(206);
     });
 })

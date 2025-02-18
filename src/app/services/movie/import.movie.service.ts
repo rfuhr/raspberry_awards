@@ -3,7 +3,6 @@ import { parse } from 'csv-parse';
 import { Movie } from '@/app/domain/movie.domain';
 import { createMovie } from './create.movie.service';
 import { getProducerByName } from '../producer.service';
-import { Producer } from '@/app/domain/producer.domain';
 
 const existsFile = async (pathToImport: string) : Promise<boolean> => {
 
@@ -70,7 +69,8 @@ export const importMovie = async (pathToImport: string) : Promise<void> => {
         try {
             await importMovieToDatabase(line);
         } catch (error) {
-            throw new Error(`Error importing movie ${line.title}: ${error.message}`);
+            const errorMessage = (error as Error).message;
+            throw new Error(`Error importing movie ${line.title}: ${errorMessage}`);
         }
     }
 }

@@ -1,25 +1,26 @@
 import request from 'supertest';
 import app from '../app';
-import { testDataSource } from "../infra/database/test.database";
-import e from 'express';
+import { getDataSource } from '../infra/database/factory.datasource';
+import path from 'path';
+import { importMovie } from '../app/services/movie.service';
 
-beforeAll(async () => {
-    // await testDataSource.destroy();
-    // await testDataSource.initialize();
-});
-
-afterAll(async () => {
-    // await testDataSource.destroy();
-});
+const clearDatabase = async () => {
+    const movieRepository = getDataSource().getRepository('MovieEntity');
+    const producerRepository = getDataSource().getRepository('ProducerEntity');
+    movieRepository.clear();
+    producerRepository.clear();
+}
 
 describe('Producer', () => {
-
     it('deve criar um produtor com sucesso', async () => {
+        clearDatabase();
         const response = await request(app).post('/api/producers').send({name: 'Joel Silver'});
         expect(response.status).toBe(201);
+        expect(response.body.name).toBe('Joel Silver');
     });
 
     it('deve retornar todos os produtores', async () => {
+        clearDatabase();
         await request(app).post('/api/producers').send({name: 'Joel Silver'});
         await request(app).post('/api/producers').send({name: 'Steven Spielberg'});
 
@@ -32,30 +33,52 @@ describe('Producer', () => {
     });
 
     it('deve retornar um produtor por id', async () => {
-        const producer = await request(app).post('/api/producers').send({name: 'Joel Silver'});
+        clearDatabase();
+        let response = await request(app).post('/api/producers').send({name: 'Joel Silver'});
 
-        const response = await request(app).get(`/api/producers/${producer.body.id}`);
+        response = await request(app).get(`/api/producers/${response.body.id}`);
 
         expect(response.status).toBe(200);
         expect(response.body.name).toBe('Joel Silver');
     });
 
     it('deve atualizar um produtor com sucesso', async () => {
-        const producer = await request(app).post('/api/producers').send({name: 'Joel Silver'});
+        clearDatabase();
+        let response = await request(app).post('/api/producers').send({name: 'Joel Silver'});
 
-        const response = await request(app).put(`/api/producers/${producer.body.id}`).send({name: 'Steven Spielberg'});
+        response = await request(app).put(`/api/producers/${response.body.id}`).send({name: 'Steven Spielberg'});
 
         expect(response.status).toBe(200);
-        expect(response.text).toBe('Producer com id 1 updated');
         expect(response.body.name).toBe('Steven Spielberg');
+        expect(response.body.id).toBeDefined();
     });
 
     it('deve deletar um produtor com sucesso', async () => {
-        const producer = await request(app).post('/api/producers').send({name: 'Joel Silver'});
+        clearDatabase();
+        let response = await request(app).post('/api/producers').send({name: 'Joel Silver'});
 
-        const response = await request(app).delete(`/api/producers/${producer.body.id}`);
+        response = await request(app).delete(`/api/producers/${response.body.id}`);
 
         expect(response.status).toBe(204);
     });
 
+    it('deve retornar a lista de intervalos de premiação', async () => {
+        clearDatabase();
+
+        const pathFile = path.resolve(__dirname, 'Movielist.csv');
+        await importMovie(pathFile);
+
+        const response = await request(app).get('/api/producers/winning-intervals');
+
+        expect(response.status).toBe(200);
+        expect(response.body.min.length).toBe(1);
+        expect(response.body.min[0].producer).toBe('Joel Silver');
+        expect(response.body.min[0].interval).toBe(1);
+        expect(response.body.min[0].previousWin).toBe(1990);
+        expect(response.body.min[0].followingWin).toBe(1991);
+        expect(response.body.max[0].producer).toBe('Matthew Vaughn');
+        expect(response.body.max[0].interval).toBe(13);
+        expect(response.body.max[0].previousWin).toBe(2002);
+        expect(response.body.max[0].followingWin).toBe(2015);        
+    });
 })

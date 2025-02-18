@@ -1,10 +1,10 @@
 import { ProducerMapper } from "@/app/mappers/producer.mapper";
 import { Producer } from "@/app/domain/producer.domain";
 import { ProducerEntity } from "@/app/entities/producer.entity";
-import { prodDataSource } from "@/infra/database/prod.database";
+import { getDataSource } from "@/infra/database/factory.datasource";
 
 export const udpateProducer = async (id:number, producer: Producer): Promise<Producer> => {
-    const producerRepository = prodDataSource.getRepository(ProducerEntity);
+    const producerRepository = getDataSource().getRepository(ProducerEntity);
     const producerEntity = await producerRepository.findOne({
         where: { id },
     });

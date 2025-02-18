@@ -7,5 +7,6 @@ export const testDataSource = new DataSource({
     database: ':memory:',
     synchronize: true,
     logging: false,
-    entities: [MovieEntity, ProducerEntity]
+    entities: [MovieEntity, ProducerEntity],
+    dropSchema: true
 });

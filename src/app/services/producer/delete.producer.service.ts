@@ -1,8 +1,8 @@
 import { ProducerEntity } from "@/app/entities/producer.entity";
-import { prodDataSource } from "@/infra/database/prod.database";
+import { getDataSource } from "@/infra/database/factory.datasource";
 
 export const deleteProducer = async (id: number): Promise<boolean> => {
-    const producerRepository = prodDataSource.getRepository(ProducerEntity);
+    const producerRepository = getDataSource().getRepository(ProducerEntity);
     const producerEntity = await producerRepository.findOne({
         where: { id },
     });

@@ -13,5 +13,6 @@ export default {
     testMatch: [
       '**/src/**/*/*.test.ts', 
     ],
+    setupFilesAfterEnv: ["<rootDir>/src/tests/test-setup.ts"],
   };
   

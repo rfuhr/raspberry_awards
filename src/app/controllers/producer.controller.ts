@@ -15,8 +15,8 @@ export class ProducerController {
     }
     
     static async createProducer(_req: Request, res: Response): Promise<void> {
-        await createProducer(_req.body);
-        res.status(201).send('Producer created');
+        const producer = await createProducer(_req.body);
+        res.status(201).json(producer);
     }
     
     static async updateProducer(req: Request, res: Response): Promise<void> {

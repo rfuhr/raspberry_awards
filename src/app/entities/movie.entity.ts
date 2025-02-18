@@ -13,7 +13,7 @@ export class MovieEntity  {
     @Column({ type: "varchar", length: 500 })
     studios!: string;
 
-    @ManyToMany(() => ProducerEntity, { cascade: true })
+    @ManyToMany(() => ProducerEntity, (producer) => producer.movies, { cascade: true })
     @JoinTable()
     producers!: ProducerEntity[];
 

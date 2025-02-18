@@ -4,7 +4,7 @@ import { DataSource } from "typeorm";
 
 export const prodDataSource = new DataSource({
     type: 'sqlite',
-    database: './banco.sqllite',
+    database: ':memory:',
     synchronize: true,
     logging: false,
     entities: [MovieEntity, ProducerEntity]

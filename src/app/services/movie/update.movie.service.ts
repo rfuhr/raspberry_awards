@@ -2,11 +2,11 @@ import { Movie } from "@/app/domain/movie.domain";
 import { MovieEntity } from "@/app/entities/movie.entity";
 import { MovieMapper } from "@/app/mappers/movie.mapper";
 import { ProducerMapper } from "@/app/mappers/producer.mapper";
-import { prodDataSource } from "@/infra/database/prod.database";
+import { getDataSource } from "@/infra/database/factory.datasource";
 
 export const updateMovie = async (id: number, movie: Movie): Promise<Movie> => {
 
-    const movieRepository = prodDataSource.getRepository(MovieEntity);
+    const movieRepository = getDataSource().getRepository(MovieEntity);
     const movieEntity = await movieRepository.findOneBy({ id });
     if (movieEntity === null) {
         throw new Error('Movie not found');

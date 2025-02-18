@@ -18,8 +18,8 @@ export class MovieController {
     }
 
     static async createMovie(_req: Request, res: Response): Promise<void> {
-        await createMovie(_req.body);
-        res.status(201).send('Movie created');
+        const movie = await createMovie(_req.body);
+        res.status(201).json(movie);
     }
 
     static async updateMovie(req: Request, res: Response): Promise<void> {

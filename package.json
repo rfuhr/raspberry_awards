@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development tsx watch --inspect=9228 src/index.ts",
-    "test": "cross-env NODE_ENV=test jest --passWithNoTests --silent --noStackTrace --runInBand"
+    "test": "cross-env NODE_ENV=test jest --verbose --passWithNoTests --silent --noStackTrace --runInBand --detectOpenHandles"
   },
   "keywords": [],
   "author": "",
