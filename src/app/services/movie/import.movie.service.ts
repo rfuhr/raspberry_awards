@@ -3,6 +3,7 @@ import { parse } from 'csv-parse';
 import { Movie } from '@/app/domain/movie.domain';
 import { createMovie } from './create.movie.service';
 import { getProducerByName } from '../producer.service';
+import { NotFoundError } from '@/app/exceptions/NotFoundError';
 
 const existsFile = async (pathToImport: string) : Promise<boolean> => {
 
@@ -60,7 +61,7 @@ const parseCSV = async (pathToImport: string) : Promise<any[]> => {
 export const importMovie = async (pathToImport: string) : Promise<void> => {
 
     if (!await existsFile(pathToImport)) {
-        throw new Error(`File not found: ${pathToImport}`);
+        throw new NotFoundError(`Arquivo não encontrado: ${pathToImport}`);
     }
 
     const lines = await parseCSV(pathToImport);
@@ -70,7 +71,7 @@ export const importMovie = async (pathToImport: string) : Promise<void> => {
             await importMovieToDatabase(line);
         } catch (error) {
             const errorMessage = (error as Error).message;
-            throw new Error(`Error importing movie ${line.title}: ${errorMessage}`);
+            throw new Error(`Erro ao importar filmes ${line.title}: ${errorMessage}`);
         }
     }
 }

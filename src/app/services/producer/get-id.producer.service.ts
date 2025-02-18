@@ -1,5 +1,6 @@
 import { Producer } from "../../domain/producer.domain";
 import { ProducerEntity } from "@/app/entities/producer.entity";
+import { NotFoundError } from "@/app/exceptions/NotFoundError";
 import { ProducerMapper } from "@/app/mappers/producer.mapper";
 import { getDataSource } from "@/infra/database/factory.datasource";
 
@@ -9,6 +10,7 @@ export const getProducerById = async (id: number): Promise<Producer> => {
         where: { id },
     });
     if (producer === null) 
-        throw new Error('Producer not found');
+        throw new NotFoundError('Produtor não encontrado');
+    
     return ProducerMapper.toDomain(producer);
 }

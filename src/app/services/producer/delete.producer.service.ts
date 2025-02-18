@@ -1,4 +1,5 @@
 import { ProducerEntity } from "@/app/entities/producer.entity";
+import { NotFoundError } from "@/app/exceptions/NotFoundError";
 import { getDataSource } from "@/infra/database/factory.datasource";
 
 export const deleteProducer = async (id: number): Promise<boolean> => {
@@ -7,7 +8,7 @@ export const deleteProducer = async (id: number): Promise<boolean> => {
         where: { id },
     });
     if (producerEntity === null) 
-        throw new Error('Producer not found');
+        throw new NotFoundError('Produtor não encontrado');
     await producerRepository.remove(producerEntity);
     
     return true;
