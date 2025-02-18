@@ -1,15 +1,15 @@
-import { fetchAllProducers } from './producer/fetch-all.producer.service';
-import { fetchProducerById } from './producer/fetch-id.producer.service';
+import { getAllProducers } from './producer/get-all.producer.service';
+import { getProducerById } from './producer/get-id.producer.service';
 import { createProducer } from './producer/create.producer.service';
 import { udpateProducer } from './producer/update.producer.service';
 import { deleteProducer } from './producer/delete.producer.service';
 import { getWinningIntervals } from './producer/get-winning-intervals.producer.service';
 
 export {
-    fetchAllProducers,
+    getAllProducers,
     createProducer,
     getWinningIntervals,
-    fetchProducerById,
+    getProducerById,
     udpateProducer,
     deleteProducer
 }

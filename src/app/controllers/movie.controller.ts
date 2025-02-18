@@ -1,16 +1,16 @@
 import { Request, Response } from 'express';
-import { fetchAll, fetchMovieById, createMovie, updateMovie, deleteMovie } from '../services/movie.service';
+import { getAll, getMovieById, createMovie, updateMovie, deleteMovie } from '../services/movie.service';
 
 export class MovieController {
 
     static async listMovies(_req: Request, res: Response): Promise<void> {
-        const movies = await fetchAll();
+        const movies = await getAll();
         res.status(200).json(movies);
     }
 
     static async getMovieById(req: Request, res: Response): Promise<void> {
         const { id } = req.params;
-        const movie = await fetchMovieById(Number(id));
+        const movie = await getMovieById(Number(id));
         res.status(200).send(movie);
     }
 

@@ -1,12 +1,12 @@
-import { fetchAll } from '../services/movie/fetch-all.movie.service';
-import { fetchMovieById } from '../services/movie/fetch-id.movie.service';
+import { getAll } from '../services/movie/get-all.movie.service';
+import { getMovieById } from '../services/movie/get-id.movie.service';
 import { createMovie } from './movie/create.movie.service';
 import { updateMovie } from './movie/update.movie.service';
 import { deleteMovie } from './movie/delete.movie.service';
 
 export {
-    fetchAll,
-    fetchMovieById,
+    getAll,
+    getMovieById,
     createMovie,
     updateMovie,
     deleteMovie

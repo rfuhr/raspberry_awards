@@ -1,6 +1,6 @@
 import { Producer } from "@/app/domain/producer.domain";
 
-export const fetchAllProducers = async (): Promise<Producer []> => {
+export const getAllProducers = async (): Promise<Producer []> => {
     return [
         {
             id: 1,
