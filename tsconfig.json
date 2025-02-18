@@ -1,0 +1,32 @@
+{
+    "compilerOptions": {
+      "target": "ESNext",
+      "module": "ESNext",
+      "baseUrl": ".",
+      "outDir": "./dist",
+      "paths": {
+        "@/*": [
+          "src/*"
+        ]
+      },
+      "moduleResolution": "Node",
+      "importsNotUsedAsValues": "remove",
+      "strict": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "types": [
+        "node",
+        // "jest"
+      ],
+      "resolveJsonModule": true,
+      "isolatedModules": true
+    },
+    "include": [
+      "src/**/*"
+    ],
+    "exclude": [
+      "node_modules",
+    //   "**/*.test.ts"
+    ]
+  }
