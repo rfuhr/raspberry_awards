@@ -11,6 +11,6 @@ export interface WinningIntervals {
 }
 
 export interface Producer {
-    id: number;
+    id?: number;
     name: string;
 }

@@ -5,12 +5,11 @@ import { MovieEntity } from "./movie.entity";
 export class ProducerEntity {
  
     @PrimaryGeneratedColumn()
-    id!: number;
+    id?: number;
 
     @Column({ type: "varchar", length: 255 })
     name!: string;
 
-    @ManyToMany(() => MovieEntity, movie => movie.producers)
-    @JoinTable()
+    @ManyToMany(() => MovieEntity)
     movies?: MovieEntity[] | null;
 }

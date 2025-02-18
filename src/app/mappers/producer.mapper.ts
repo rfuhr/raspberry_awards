@@ -4,7 +4,7 @@ import { ProducerEntity } from "../entities/producer.entity";
 export class ProducerMapper {
     static toPersistence(data: Producer): ProducerEntity {
         return {
-            id: data.id,
+            id: data.id ?? 0,
             name: data.name
         };
     }

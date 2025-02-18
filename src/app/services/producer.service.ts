@@ -1,5 +1,6 @@
 import { getAllProducers } from './producer/get-all.producer.service';
 import { getProducerById } from './producer/get-id.producer.service';
+import { getProducerByName } from './producer/get-name.producer.service';
 import { createProducer } from './producer/create.producer.service';
 import { udpateProducer } from './producer/update.producer.service';
 import { deleteProducer } from './producer/delete.producer.service';
@@ -11,5 +12,6 @@ export {
     getWinningIntervals,
     getProducerById,
     udpateProducer,
-    deleteProducer
+    deleteProducer,
+    getProducerByName
 }

@@ -26,7 +26,6 @@ export class MovieMapper {
     }
 
     static toDomains(data: MovieEntity[]): Movie[] {
-        console.log(data);
         return data.map(movie => this.toDomain(movie));
     }
 }

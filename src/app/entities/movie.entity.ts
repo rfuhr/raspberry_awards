@@ -4,7 +4,7 @@ import { ProducerEntity } from "./producer.entity";
 @Entity()
 export class MovieEntity  {
     @PrimaryGeneratedColumn()
-    id!: number;
+    id?: number;
     
     @Column({type: "int"})
     year!: number;
@@ -13,7 +13,8 @@ export class MovieEntity  {
     @Column({ type: "varchar", length: 500 })
     studios!: string;
 
-    @ManyToMany(() => ProducerEntity, producer => producer.movies, { cascade: true })
+    @ManyToMany(() => ProducerEntity, { cascade: true })
+    @JoinTable()
     producers!: ProducerEntity[];
 
     @Column({type: "boolean", nullable: true})
