@@ -12,5 +12,5 @@ export class ProducerEntity {
 
     @ManyToMany(() => MovieEntity, movie => movie.producers)
     @JoinTable()
-    movies!: MovieEntity[];
+    movies?: MovieEntity[] | null;
 }

@@ -1,27 +1,14 @@
+import { prodDataSource } from "@/infra/database/prod.database";
 import { Movie } from "../../domain/movie.domain";
+import { MovieEntity } from "@/app/entities/movie.entity";
+import { MovieMapper } from "@/app/mappers/movie.mapper";
 
 export const getAll = async (): Promise<Movie[]> => {
 
-    return [{
-        id: 1,
-        year: 2021,
-        title: 'The Matrix',
-        studios: 'Warner Bros',
-        producers: [{
-            id: 1,
-            name: 'Joel Silver'
-        }],
-        winner: true
-    },
-    {
-        id: 2,
-        year: 1980,
-        title: 'The Matrix Reloaded',
-        studios: 'Warner Bros',
-        producers: [{
-            id: 1,
-            name: 'Joel Silver'
-        }],
-        winner: false
-    }];
+    const movieRepository = prodDataSource.getRepository(MovieEntity);
+    const movies = await movieRepository.find({
+        relations: ["producers"],
+    });
+
+    return MovieMapper.toDomains(movies);
 }

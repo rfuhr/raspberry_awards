@@ -1,7 +1,7 @@
 import request from 'supertest';
 import app from '../app';
 import { testDataSource } from "../infra/database/test.database";
-import e from 'express';
+import { prodDataSource } from '../infra/database/prod.database';
 
 beforeAll(async () => {
     await testDataSource.initialize();

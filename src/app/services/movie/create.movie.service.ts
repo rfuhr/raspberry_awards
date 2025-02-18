@@ -1,15 +1,13 @@
+import { MovieEntity } from '@/app/entities/movie.entity';
+import { prodDataSource } from '../../../infra/database/prod.database';
 import { Movie } from "@/app/domain/movie.domain";
+import { MovieMapper } from '@/app/mappers/movie.mapper';
 
-export const createMovie = async (movie: any): Promise<Movie> => {
-    return {
-        id: 1,
-        year: 2021,
-        title: 'The Matrix',
-        studios: 'Warner Bros',
-        producers: [{
-            id: 1,
-            name: 'Joel Silver'
-        }],
-        winner: true
-    };
+export const createMovie = async (movie: Movie): Promise<Movie> => {
+
+    const movieRepository = prodDataSource.getRepository(MovieEntity);
+    const movieEntity = MovieMapper.toPersistence(movie);
+    const movieCreated = await movieRepository.save(movieEntity);
+
+    return MovieMapper.toDomain(movieCreated);
 }

@@ -11,6 +11,9 @@ export class MovieController {
     static async getMovieById(req: Request, res: Response): Promise<void> {
         const { id } = req.params;
         const movie = await getMovieById(Number(id));
+        if (movie === null) 
+            res.status(404).send('Movie not found');
+        
         res.status(200).send(movie);
     }
 
@@ -21,13 +24,13 @@ export class MovieController {
 
     static async updateMovie(req: Request, res: Response): Promise<void> {
         const { id } = req.params;
-        await updateMovie(Number(id), req.body);
-        res.status(200).send(`Movie com id ${id} updated`);
+        const movieUpdated = await updateMovie(Number(id), req.body);
+        res.status(200).json(movieUpdated);
     }
 
     static async deleteMovie(req: Request, res: Response): Promise<void> {
         const { id } = req.params;
         if (await deleteMovie(Number(id))) 
-            res.status(204).send(`Movie com id ${id} deleted`);
+            res.status(204).send(`Movie by id ${id} deleted`);
     }
 }

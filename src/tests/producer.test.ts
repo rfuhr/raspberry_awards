@@ -4,11 +4,12 @@ import { testDataSource } from "../infra/database/test.database";
 import e from 'express';
 
 beforeAll(async () => {
-    await testDataSource.initialize();
+    // await testDataSource.destroy();
+    // await testDataSource.initialize();
 });
 
 afterAll(async () => {
-    await testDataSource.destroy();
+    // await testDataSource.destroy();
 });
 
 describe('Producer', () => {
