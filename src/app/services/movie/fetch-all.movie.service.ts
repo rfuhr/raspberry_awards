@@ -1,15 +1,25 @@
-export const fetchAll = async (): Promise<any> => {
+import { Movie } from "../../domain/movie.domain";
+
+export const fetchAll = async (): Promise<Movie[]> => {
 
     return [{
         year: 2021,
         title: 'The Matrix',
-        producer: 'Joel Silver',
+        studios: ['Warner Bros'],
+        producers: [{
+            id: 1,
+            name: 'Joel Silver'
+        }],
         winner: true
     },
     {
         year: 1980,
         title: 'The Matrix Reloaded',
-        producer: 'Joel Silver',
+        studios: ['Warner Bros'],
+        producers: [{
+            id: 1,
+            name: 'Joel Silver'
+        }],
         winner: false
     }];
 }

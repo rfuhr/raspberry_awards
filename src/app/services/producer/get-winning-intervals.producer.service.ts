@@ -1,4 +1,6 @@
-export const getWinningIntervals = async () => {
+import { WinningIntervals } from "../../domain/producer.domain";
+
+export const getWinningIntervals = async (): Promise<WinningIntervals> => {
     return {
         "min": [
             {
