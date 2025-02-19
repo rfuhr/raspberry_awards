@@ -1,4 +1,3 @@
-import { Movie } from "@/app/domain/movie.domain";
 import { WinningIntervals, WinningProducer } from "../../domain/producer.domain";
 import { ProducerEntity } from "@/app/entities/producer.entity";
 import { getDataSource } from "@/infra/database/factory.datasource";
