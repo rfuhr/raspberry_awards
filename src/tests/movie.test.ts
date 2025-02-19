@@ -99,6 +99,6 @@ describe('Movie', () => {
         const response = await request(app).get('/api/movies');
 
         expect(response.status).toBe(200);
-        expect(response.body).toHaveLength(206);
+        expect(response.body).toHaveLength(209);
     });
 })

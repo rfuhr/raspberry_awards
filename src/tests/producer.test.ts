@@ -71,14 +71,23 @@ describe('Producer', () => {
         const response = await request(app).get('/api/producers/winning-intervals');
 
         expect(response.status).toBe(200);
-        expect(response.body.min.length).toBe(1);
+        expect(response.body.min.length).toBe(2);
         expect(response.body.min[0].producer).toBe('Joel Silver');
         expect(response.body.min[0].interval).toBe(1);
         expect(response.body.min[0].previousWin).toBe(1990);
         expect(response.body.min[0].followingWin).toBe(1991);
+        expect(response.body.min[1].producer).toBe('Matthew Vaughn');
+        expect(response.body.min[1].interval).toBe(1);
+        expect(response.body.min[1].previousWin).toBe(2002);
+        expect(response.body.min[1].followingWin).toBe(2003);
+        expect(response.body.min.length).toBe(2);
         expect(response.body.max[0].producer).toBe('Matthew Vaughn');
-        expect(response.body.max[0].interval).toBe(13);
-        expect(response.body.max[0].previousWin).toBe(2002);
-        expect(response.body.max[0].followingWin).toBe(2015);        
+        expect(response.body.max[0].interval).toBe(22);
+        expect(response.body.max[0].previousWin).toBe(1980);
+        expect(response.body.max[0].followingWin).toBe(2002);        
+        expect(response.body.max[1].producer).toBe('Matthew Vaughn');
+        expect(response.body.max[1].interval).toBe(22);
+        expect(response.body.max[1].previousWin).toBe(2015);
+        expect(response.body.max[1].followingWin).toBe(2037);             
     });
 })

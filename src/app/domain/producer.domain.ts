@@ -1,4 +1,4 @@
-interface WinningProducer {
+export interface WinningProducer {
     producer: string;
     interval: number;
     previousWin: number;

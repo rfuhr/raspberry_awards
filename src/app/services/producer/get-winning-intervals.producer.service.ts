@@ -1,4 +1,5 @@
-import { WinningIntervals } from "../../domain/producer.domain";
+import { Movie } from "@/app/domain/movie.domain";
+import { WinningIntervals, WinningProducer } from "../../domain/producer.domain";
 import { ProducerEntity } from "@/app/entities/producer.entity";
 import { getDataSource } from "@/infra/database/factory.datasource";
 
@@ -19,21 +20,24 @@ export const getWinningIntervals = async (): Promise<WinningIntervals> => {
     });
 
     const producersWithMoviesWinners = producersWithMovieWinner.filter(producer => producer.movies && producer.movies.length >= 2);
-    let producersIntervals = producersWithMoviesWinners.map(item => {
-        item.movies?.sort((a, b) => a.year - b.year);
-        let firstYear = 0;
-        let lastYear = 0;
-        item.movies?.forEach((movie) => {
-            firstYear = (firstYear === 0 || movie.year < firstYear) ? movie.year : firstYear;
-            lastYear = (lastYear === 0 || movie.year > lastYear) ? movie.year : lastYear;
-        })
+    let producersIntervals:WinningProducer[] = [];
+    
+    producersWithMoviesWinners.forEach(item => {
+        const movies = item.movies?.sort((a, b) => a.year - b.year);
+        
 
-        return {
-            producer: item.name,
-            interval: lastYear - firstYear,
-            previousWin: firstYear,
-            followingWin: lastYear
-        }
+        movies!.forEach((movie, index) => {
+            const prox: any = movies![index + 1] || null;
+            if (prox !== null) {
+                const interval = prox.year - movie.year;
+                producersIntervals.push({
+                    producer: item.name,
+                    interval: interval,
+                    previousWin: movie.year,
+                    followingWin: prox.year
+                });
+            }
+        })
     })
 
     producersIntervals = producersIntervals.sort((a, b) => a.interval - b.interval);
