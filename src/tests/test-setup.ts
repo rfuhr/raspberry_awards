@@ -1,4 +1,4 @@
-import { getDataSource } from "@/infra/database/factory.datasource";
+import { getDataSource } from "../infra/database/factory.datasource";
 
 beforeAll(async () => {
     const dataSource = getDataSource(); 

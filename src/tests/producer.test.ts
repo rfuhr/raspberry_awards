@@ -1,5 +1,5 @@
 import request from 'supertest';
-import app from '../app';
+import app  from '../app';
 import { getDataSource } from '../infra/database/factory.datasource';
 import path from 'path';
 import { importMovie } from '../app/services/movie.service';
@@ -64,8 +64,8 @@ describe('Producer', () => {
 
     it('deve retornar a lista de intervalos de premiação', async () => {
         clearDatabase();
-
-        const pathFile = path.resolve(__dirname, 'Movielist.csv');
+        const rootPath = process.cwd();
+        const pathFile = path.resolve(rootPath, 'Movielist.csv');
         await importMovie(pathFile);
 
         const response = await request(app).get('/api/producers/winning-intervals');

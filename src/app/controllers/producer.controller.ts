@@ -45,7 +45,7 @@ export class ProducerController {
         try{
             const { id } = req.params;
             if (await deleteProducer(Number(id))) 
-                res.status(204);
+                res.status(204).send();
         } catch (error) {
             next(error);
         }

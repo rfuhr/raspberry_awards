@@ -48,7 +48,8 @@ export class MovieController {
         try {
             const { id } = req.params;
             if (await deleteMovie(Number(id))) 
-                res.status(204);
+                res.status(204).send();
+            res.status(404).send('Filme não encontrado');
         } catch (error) {
             next(error);
         }

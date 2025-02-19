@@ -92,7 +92,8 @@ describe('Movie', () => {
         movieRepository.clear();
         producerRepository.clear();
 
-        const pathFile = path.resolve(__dirname, 'Movielist.csv');
+        const rootPath = process.cwd();
+        const pathFile = path.resolve(rootPath, 'Movielist.csv');
         await importMovie(pathFile);
 
         const response = await request(app).get('/api/movies');
